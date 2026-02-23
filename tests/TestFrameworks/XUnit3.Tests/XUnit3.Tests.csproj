@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0</TargetFrameworks>
+    <RootNamespace>XUnit3.Tests</RootNamespace>
+    <AssemblyName>XUnit3.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" PrivateAssets="all" Condition="'$(TargetFramework)' == 'net6.0'">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\SilverAssertions\SilverAssertions.csproj" />
+  </ItemGroup>
+</Project>
