@@ -2,7 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+
+    <!-- NuGet package properties -->
+    <PackageId>SilverAssertions.ApacheLicenseForever</PackageId>
+    <Version>1.0.48</Version>
+    <Authors>Jeremy Ellis</Authors>
+    <Product>SilverAssertions</Product>
+    <Title>SilverAssertions</Title>
+    <Description>Fluent API for asserting the results of unit tests that targets .NET. SilverAssertions allows you to more naturally specify the expected outcome of a test using a fluent, readable syntax.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ellisnet/SilverAssertions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ellisnet/SilverAssertions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>assertions;unit-testing;testing;fluent;tdd;bdd</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon-codebrix-128.png</PackageIcon>
+    <Copyright>Copyright (c) 2026 Jeremy Ellis and contributors</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="icon-codebrix-128.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\libs\Reflectify\DennisDoomen.Reflectify\Reflectify.cs" Link="Reflectify\Reflectify.cs" />
