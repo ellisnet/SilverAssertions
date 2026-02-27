@@ -5,7 +5,7 @@
 
     <!-- NuGet package properties -->
     <PackageId>SilverAssertions.ApacheLicenseForever</PackageId>
-    <Version>1.0.48</Version>
+    <Version>1.0.49</Version>
     <Authors>Jeremy Ellis</Authors>
     <Product>SilverAssertions</Product>
     <Title>SilverAssertions</Title>
@@ -14,12 +14,12 @@
     <PackageProjectUrl>https://github.com/ellisnet/SilverAssertions</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ellisnet/SilverAssertions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>assertions;unit-testing;testing;fluent;tdd;bdd</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon-codebrix-128.png</PackageIcon>
     <Copyright>Copyright (c) 2026 Jeremy Ellis and contributors</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>assertions;unit-testing;testing;fluent;tdd;bdd;CodeBrix</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
