@@ -24,11 +24,10 @@ License: Apache License 2.0
 INSTALLATION
 ------------
 NuGet Package: SilverAssertions.ApacheLicenseForever
-Latest Version: 1.0.49 (as of Feb 2026)
-Package Size: ~250 KB
-Dependencies:
-  - JetBrains.Annotations (>= 2025.2.4)
-  - System.Configuration.ConfigurationManager (>= 10.0.3)
+Dependencies (transitive, automatically restored - no specific versions pinned
+in this document because they change frequently):
+  - JetBrains.Annotations
+  - System.Configuration.ConfigurationManager
 
 Requirements: .NET 10.0 or higher
 
@@ -36,9 +35,9 @@ To add to a .NET 10+ test project:
 
     dotnet add package SilverAssertions.ApacheLicenseForever
 
-Or in a .csproj file:
+Or in a .csproj file (let NuGet pick the latest compatible version):
 
-    <PackageReference Include="SilverAssertions.ApacheLicenseForever" Version="1.0.49" />
+    <PackageReference Include="SilverAssertions.ApacheLicenseForever" />
 
 IMPORTANT: The package name is "SilverAssertions.ApacheLicenseForever" (not just
 "SilverAssertions"). Always use this full package name when installing.
