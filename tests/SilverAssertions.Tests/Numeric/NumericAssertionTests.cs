@@ -2,6 +2,8 @@ using System;
 using Xunit;
 using Xunit.Sdk;
 
+#pragma warning disable xUnit1025
+
 namespace SilverAssertions.Tests.Numeric;
 
 public class NumericAssertionTests

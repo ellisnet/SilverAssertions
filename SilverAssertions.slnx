@@ -1,0 +1,37 @@
+<Solution>
+  <Folder Name="/Libs/" />
+  <Folder Name="/Libs/ChillBdd/">
+    <Project Path="libs/ChillBdd/DennisDoomen.ChillBdd.Tests/DennisDoomen.ChillBdd.Tests.csproj" />
+    <Project Path="libs/ChillBdd/DennisDoomen.ChillBdd/DennisDoomen.ChillBdd.csproj" />
+  </Folder>
+  <Folder Name="/Libs/Reflectify/">
+    <Project Path="libs/Reflectify/DennisDoomen.Reflectify.Tests/DennisDoomen.Reflectify.Tests.csproj" />
+    <Project Path="libs/Reflectify/DennisDoomen.Reflectify/DennisDoomen.Reflectify.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="AGENT-README.txt" />
+    <File Path="EXTRAS-README.txt" />
+    <File Path="global.json" />
+    <File Path="icon-codebrix-128.png" />
+    <File Path="LICENSE" />
+    <File Path="MAINTAINER-README.txt" />
+    <File Path="README-INDEX.txt" />
+    <File Path="README.md" />
+    <File Path="THIRD-PARTY-NOTICES.txt" />
+  </Folder>
+  <Folder Name="/TestFrameworks/">
+    <Project Path="tests/TestFrameworks/MSpec.Tests/MSpec.Tests.csproj" />
+    <Project Path="tests/TestFrameworks/MSTestV4.Tests/MSTestV4.Tests.csproj" />
+    <Project Path="tests/TestFrameworks/NUnit4.Tests/NUnit4.Tests.csproj" />
+    <Project Path="tests/TestFrameworks/XUnit3.Tests/XUnit3.Tests.csproj" />
+    <Project Path="tests/TestFrameworks/XUnit4.Tests/XUnit4.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/SilverAssertions.Equivalency.Tests/SilverAssertions.Equivalency.Tests.csproj" />
+    <Project Path="tests/SilverAssertions.Tests/SilverAssertions.Tests.csproj" />
+    <Project Path="tests/TestAssemblyA/TestAssemblyA.csproj" />
+    <Project Path="tests/TestAssemblyB/TestAssemblyB.csproj" />
+  </Folder>
+  <Project Path="src/SilverAssertions/SilverAssertions.csproj" />
+</Solution>

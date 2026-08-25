@@ -1,3 +1,4 @@
+using SilverAssertions.Equivalency.Tracing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,8 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using SilverAssertions.Equivalency.Tracing;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Xunit;
 using Xunit.Sdk;
 
@@ -1123,11 +1123,11 @@ public class DictionaryTests
         // Arrange
         const string json = """
                             {
-                                            "NestedDictionary": {
-                                                "StringProperty": "string",
-                                                "IntProperty": 123
-                                            }
-                                        }
+                                "NestedDictionary": {
+                                    "StringProperty": "string",
+                                    "IntProperty": 123
+                                }
+                            }
                             """;
 
         var expectedResult = new Dictionary<string, object>
@@ -1140,12 +1140,17 @@ public class DictionaryTests
         };
 
         // Act
-        var result = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+        // The nested Dictionary<string, object> target matters. Deserializing into a
+        // flat Dictionary<string, object> would put an opaque JsonElement at
+        // ["NestedDictionary"], and BeEquivalentTo would stop at "not a dictionary"
+        // without ever comparing the nested values. With this shape JsonElement
+        // appears only at the leaves, which is the mismatch under test.
+        var result = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, object>>>(json);
         Action act = () => result.Should().BeEquivalentTo(expectedResult);
 
         // Assert
         act.Should().Throw<XunitException>()
-            .WithMessage("Expected*String*JValue*");
+            .WithMessage("Expected*[NestedDictionary][StringProperty]*System.String*JsonElement*");
     }
 
     [Fact]

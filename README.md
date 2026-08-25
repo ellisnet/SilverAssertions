@@ -12,8 +12,36 @@ was released on Nov 11, 2025; and will be actively supported by Microsoft until
 Nov 14, 2028. Please update your C#/.NET code and projects to the latest LTS
 version of Microsoft .NET.
 
-SilverAssertions is a fork of the code of the popular FluentAssertions library
-version 7.1.0 - see below for licensing details.
+The package id carries the `ApacheLicenseForever` suffix as a commitment: it is
+published under the Apache License 2.0 and will not be switched to another
+license. The assembly and namespace root are plain `SilverAssertions`.
+
+## Installation
+
+```
+dotnet add package SilverAssertions.ApacheLicenseForever
+```
+
+SilverAssertions is an assertion library only - bring your own test framework.
+It detects xUnit, NUnit, MSTest and MSpec automatically and throws that
+framework's own assertion-failure exception.
+
+If your test project uses xunit.v3 4.x on the .NET 10 SDK, add a `global.json`
+beside your solution so `dotnet test` runs it through Microsoft Testing
+Platform:
+
+```json
+{
+  "test": {
+    "runner": "Microsoft.Testing.Platform"
+  }
+}
+```
+
+Without it, `dotnet test` stops with *"Testing with VSTest target is no longer
+supported by Microsoft.Testing.Platform on .NET 10 SDK and later."* Note also
+that `--nologo` is a VSTest-only switch: passing it in this mode reports
+"Zero tests ran" without running anything. Use `dotnet test -- --no-banner`.
 
 ## SilverAssertions supports:
 
@@ -116,18 +144,21 @@ dateTime.Should().BeAfter(new DateTime(2025, 1, 1));
 dateTime.Should().HaveYear(2025).And.HaveMonth(7).And.HaveDay(4);
 ```
 
-Note that significant additional sample code is available in the
-`SilverAssertions.Tests` project; and in the
-`SilverAssertions.Equivalency.Tests` project.
+## Further reading
+
+- **[AGENT-README.txt](https://github.com/ellisnet/SilverAssertions/blob/main/AGENT-README.txt)** - the complete API
+  reference, with worked examples, common pitfalls and the extensibility
+  points. Written for AI coding agents, but it is the most thorough
+  documentation available and reads perfectly well for humans.
+- **[SilverAssertions.Tests](https://github.com/ellisnet/SilverAssertions/tree/main/tests/SilverAssertions.Tests)** and
+  **[SilverAssertions.Equivalency.Tests](https://github.com/ellisnet/SilverAssertions/tree/main/tests/SilverAssertions.Equivalency.Tests)**
+  - the test suites double as executable documentation, with far more sample
+  code than this page.
 
 ## License
 
-The project is licensed under the Apache License, Version 2.0. see:
-https://en.wikipedia.org/wiki/Apache_License
+SilverAssertions is licensed under the Apache License 2.0 - see the
+[LICENSE](https://github.com/ellisnet/SilverAssertions/blob/main/LICENSE) file.
 
-All code from FluentAssertions version 7.1.0 was licensed under the Apache
-License, version 2.0 - as of Jan 27, 2025. This project (SilverAssertions)
-complies with all provisions of the open source license of FluentAssertions
-version 7.1.0 (code) - and will make all modified, adapted and derived code
-freely available as open source, under the same license as the FluentAssertions
-code license - version 7.1.0 - Apache License, version 2.0.
+For licensing and provenance information about the open source code included in
+this package, see [THIRD-PARTY-NOTICES.txt](https://github.com/ellisnet/SilverAssertions/blob/main/THIRD-PARTY-NOTICES.txt).

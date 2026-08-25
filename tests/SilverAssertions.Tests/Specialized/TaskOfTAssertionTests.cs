@@ -101,6 +101,10 @@ public static class TaskOfTAssertionTests
         [Fact]
         public async Task When_task_completes_and_async_result_is_not_expected_it_should_fail()
         {
+            Assert.SkipWhen(JitOptimization.IsEnabled,
+                "CallerIdentifier cannot recover the caller name when the JIT inlines "
+                + "the calling frame; see JitOptimization.");
+
             // Arrange
             var timer = new FakeClock();
             var taskFactory = new TaskCompletionSource<int>();

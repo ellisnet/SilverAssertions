@@ -30,7 +30,7 @@ REPOSITORY LAYOUT
     LICENSE                   Apache License 2.0.
     THIRD-PARTY-NOTICES.txt   Notices for FluentAssertions, Chill, Reflectify.
     icon-codebrix-128.png     Package icon.
-    SilverAssertions.sln      Solution; also carries the Solution Items folder.
+    SilverAssertions.slnx     Solution; also carries the Solution Items folder.
 
     src/SilverAssertions/     The library. Sub-folders map to namespaces:
         CallerIdentification/   Caller-name detection for "{context}".
@@ -65,8 +65,9 @@ REPOSITORY LAYOUT
         TestAssemblyA/, TestAssemblyB/      Fixture assemblies used by the
                                             assembly and type-selector specs.
         TestFrameworks/XUnit3.Tests/        Smoke tests, one per supported
-        TestFrameworks/NUnit4.Tests/        framework, proving the right
-        TestFrameworks/MSTestV4.Tests/      assertion exception type is thrown.
+        TestFrameworks/XUnit4.Tests/        framework (and per xunit.v3 package
+        TestFrameworks/NUnit4.Tests/        line), proving the right assertion
+        TestFrameworks/MSTestV4.Tests/      exception type is thrown.
         TestFrameworks/MSpec.Tests/
 
     libs/
@@ -79,11 +80,11 @@ REPOSITORY LAYOUT
 BUILDING
 ========
 Everything targets net10.0; a .NET 10 SDK is the only prerequisite. There is no
-Directory.Build.props, no global.json and no build script - the solution is
-self-contained.
+Directory.Build.props and no build script. There IS a global.json at the
+repository root, and it is load-bearing - see TESTING below.
 
-    dotnet restore SilverAssertions.sln
-    dotnet build SilverAssertions.sln -c Release
+    dotnet restore SilverAssertions.slnx
+    dotnet build SilverAssertions.slnx -c Release
 
 IMPORTANT: the library project sets GeneratePackageOnBuild=true, so EVERY build
 of src/SilverAssertions produces a .nupkg in its bin folder, with a version
@@ -91,23 +92,125 @@ derived from the clock at build time. That is expected; see PACKAGING.
 
 TESTING
 =======
-    dotnet test SilverAssertions.sln
+Run BOTH of these from the repository root. Together they cover every test
+project in the solution:
+
+    dotnet build SilverAssertions.slnx && dotnet test --test-modules "**/bin/Debug/net10.0/*.Tests.dll"
+
+    cd tests/TestFrameworks/MSpec.Tests && dotnet test
+
+"dotnet test SilverAssertions.slnx" does NOT work; it fails before running a
+single test. Why it takes two commands:
+
+  - global.json at the repository root selects the Microsoft Testing Platform
+    (MTP) runner. That is required, not optional: the xUnit v3 4.x projects
+    cannot run under VSTest on the .NET 10 SDK at all.
+  - The runner is chosen ONCE per "dotnet test" invocation and applies to every
+    project in it. A solution-wide run therefore requires that EVERY project be
+    MTP-capable.
+  - Machine.Specifications has no MTP runner, so MSpec.Tests cannot be, and a
+    solution-wide run is rejected outright.
+  - MSpec.Tests therefore carries its own global.json pinning it to VSTest.
+    global.json is resolved from the CURRENT DIRECTORY, not per project, so
+    that file only takes effect when dotnet test is invoked from inside that
+    folder - hence the "cd". Do not delete it.
+
+The first command uses --test-modules (a glob over already-built assemblies)
+instead of --solution, because that is the only form that runs several projects
+in one invocation without triggering the solution-wide runner check. Two
+consequences: it does not build anything, hence the "dotnet build &&" in front;
+and it rejects -c/-f/--arch/--os/--runtime, so to test Release you build with
+-c Release and change Debug to Release inside the glob.
+
+IMPORTANT - THE FIRST COMMAND ALWAYS EXITS NON-ZERO, EVEN WHEN EVERY TEST
+PASSES. The glob also matches MSpec.Tests.dll, which is not an MTP test app.
+MTP launches it anyway, gets nothing back, and records:
+
+    MSpec.Tests.dll Zero tests ran
+
+That surfaces as "error: 1" in the summary and sets the exit code to 1. So a
+completely green run looks like this:
+
+    error: 1
+    total: <n>
+    failed: 0
+    succeeded: <n>
+
+Judge the run by the "failed:" count, NOT by the exit code. A run with genuine
+test failures also exits non-zero, so the exit code cannot distinguish the two.
+
+This is why neither command is currently wired into CI as a pass/fail gate.
+Fixing it properly means keeping MSpec.Tests.dll out of the glob's reach - for
+example by giving that project a different output path - rather than loosening
+what the gate accepts.
+
+MSpec's own two tests are covered by the second command, which exits normally.
 
 No environment variables, no opt-in switches, no external services, no special
 prep. The suites are pure in-process unit tests.
 
+DEBUG VS RELEASE. Both configurations pass, but four tests are SKIPPED in an
+optimized build:
+
+    CallerIdentifierTests.When_namespace_is_prefixed_with_System_caller_should_be_known
+    CallerIdentifierTests.When_there_are_several_statements_on_the_line_it_should_use_the_correct_statement
+    CallerIdentifierTests.All_core_code_anywhere_in_the_stack_trace_is_ignored
+    TaskOfTAssertionTests+CompleteWithinAsync.When_task_completes_and_async_result_is_not_expected_it_should_fail
+
+CallerIdentifier recovers the name of the variable under assertion by walking
+the stack to the caller's frame and reading that source line. With optimization
+on, the JIT can inline the caller away; the frame is gone and the name degrades
+to a generic noun - "Expected object to be <null>" instead of "Expected foo2 to
+be <null>". The assertion still fails on the right thing; only the wording
+changes. This is inherent to the technique and cannot be fixed from inside the
+library, because the inlined frame belongs to the CONSUMER's assembly.
+
+The four tests above assert on that recovered name, so they guard with
+Assert.SkipWhen(JitOptimization.IsEnabled, ...) - see
+tests/SilverAssertions.Tests/JitOptimization.cs. They run normally in Debug and
+skip in Release, so BOTH configurations report zero failures and a real
+regression cannot hide among expected ones.
+
+    Debug:    6391 total, 0 failed, 0 skipped
+    Release:  6391 total, 0 failed, 4 skipped
+
+JitOptimization keys off DebuggableAttribute.IsJITOptimizerDisabled rather than
+"#if DEBUG", so it follows the optimization setting itself: a Release build with
+-p:Optimize=false runs all four. That is also how to verify the cause is
+inlining and not missing PDBs - symbols are present in Release either way.
+
 Notes:
   - SilverAssertions.Tests and SilverAssertions.Equivalency.Tests use xUnit v3
-    with xunit.runner.visualstudio, Microsoft.NET.Test.Sdk and
-    coverlet.collector.
+    with xunit.runner.visualstudio, and Microsoft.NET.Test.Sdk.
   - SilverAssertions.Tests additionally references System.Data.DataSetExtensions
     (typed DataSet specs), TestAssemblyA, TestAssemblyB and the vendored
     DennisDoomen.ChillBdd project (the GivenSubject/TestFor base classes used by
     AssertionOptionsTests).
-  - The four projects under tests/TestFrameworks each reference a different test
-    framework so that the adapters in src/SilverAssertions/Execution really are
-    exercised. Keep all four building; a broken one means the corresponding
-    adapter is untested.
+  - The five projects under tests/TestFrameworks exist so that the adapters in
+    src/SilverAssertions/Execution really are exercised. Keep all five
+    building; a broken one means the corresponding adapter is untested.
+  - XUnit3.Tests and XUnit4.Tests are NOT duplicates. Both drive the same
+    XUnit3TestFramework adapter, which binds by assembly name
+    (xunit.v3.assert), but they pin different package lines: XUnit3.Tests
+    stays on xunit.v3 3.x, XUnit4.Tests tracks the current 4.x. Together they
+    prove the adapter works against both. Each csproj carries a comment saying
+    so; do not "consolidate" them, and do not bump XUnit3.Tests during a
+    package sweep.
+  - Note that xunit.v3 4.0.0 is not a typo. xUnit.net moved the product
+    generation into the package NAME so the package VERSION could follow
+    SemVer independently, so "xunit.v3 4.0.0" means version 4.0.0 of the
+    xUnit.net v3 line. A future generation would be a package named xunit.v4.
+  - Their runners differ, and the differences are deliberate. XUnit3.Tests and
+    XUnit4.Tests are MTP-capable out of the box. MSTestV4.Tests sets
+    EnableMSTestRunner, and NUnit4.Tests sets EnableNUnitRunner; both also need
+    OutputType=Exe, because an MTP test project hosts its own runner and must
+    be an executable. MSpec.Tests stays on VSTest - see TESTING.
+  - Do not put an IncludeAssets filter on NUnit4.Tests' NUnit3TestAdapter
+    reference. The usual "runtime; build; native; contentfiles; analyzers;
+    buildtransitive" boilerplate omits "compile", and the MTP runner's
+    generated entry point must compile against Microsoft.Testing.Platform,
+    which that adapter supplies transitively. With the filter in place the
+    project fails to build with CS0234.
   - Test-class and file naming follows the upstream shape: one file per method
     group, e.g. StringAssertionTests.Contain.cs, all declaring
     "public partial class StringAssertionTests". Test method names are

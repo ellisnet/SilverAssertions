@@ -2117,6 +2117,20 @@ MyProject.Tests.csproj (the essentials):
 
     </Project>
 
+On the .NET 10 SDK, xunit.v3 4.x also needs a global.json beside the solution,
+because it runs on Microsoft Testing Platform (MTP) and the .NET 10 SDK will not
+run MTP-based tests through VSTest:
+
+    {
+      "test": {
+        "runner": "Microsoft.Testing.Platform"
+      }
+    }
+
+Without it, dotnet test fails immediately with "Testing with VSTest target is no
+longer supported by Microsoft.Testing.Platform on .NET 10 SDK and later."
+xunit.v3 3.x does not require the file, but works with it.
+
 CalculatorTests.cs:
 
     using SilverAssertions;
@@ -2143,6 +2157,13 @@ CalculatorTests.cs:
 Then:
 
     dotnet test
+
+Do NOT pass --nologo. It is a VSTest-only switch; in MTP mode the SDK forwards
+it to the test application, which rejects it and exits before discovery, so the
+run reports "Zero tests ran" (exit code 5) and nothing executes. The MTP
+spelling is --no-banner:
+
+    dotnet test -- --no-banner
 
 ================================================================================
 

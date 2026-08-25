@@ -1,21 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFrameworks>net10.0</TargetFrameworks>
+    <RootNamespace>XUnit4.Tests</RootNamespace>
+    <AssemblyName>XUnit4.Tests</AssemblyName>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+
+    <!--IMPORTANT: Keep xunit.runner.visualstudio on the CURRENT 4.x line here - XUnit3.Tests covers 3.x-->
     <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.v3" Version="4.0.0" />
-  </ItemGroup>
 
+    <!--IMPORTANT: Keep xunit.v3 on the CURRENT 4.x line here - XUnit3.Tests is pinned to 3.x.
+        Together the two projects prove the XUnit3TestFramework adapter binds against both
+        package lines of xUnit.net v3. Do not consolidate them into one project.-->
+    <PackageReference Include="xunit.v3" Version="4.0.0" />
+
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\SilverAssertions\SilverAssertions.csproj" />
   </ItemGroup>
-
 </Project>

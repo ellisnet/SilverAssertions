@@ -15,10 +15,27 @@ the test file that demonstrates it.
 
 TEST PROJECTS
 =============
+Running them all takes two commands from the repository root - "dotnet test
+SilverAssertions.slnx" does not work. MAINTAINER-README.txt explains why:
+
+    dotnet build SilverAssertions.slnx && dotnet test --test-modules "**/bin/Debug/net10.0/*.Tests.dll"
+
+    cd tests/TestFrameworks/MSpec.Tests && dotnet test
+
+Both Debug and Release pass. Four caller-identification tests are skipped in
+Release, because JIT inlining removes the frame they depend on;
+MAINTAINER-README.txt explains it.
+
+WARNING: the first command always exits non-zero, even when every test passes.
+Its glob also matches MSpec.Tests.dll, which is not a Microsoft Testing
+Platform test app and reports "Zero tests ran", showing up as "error: 1". Judge
+the run by the "failed:" count, not by the exit code. MAINTAINER-README.txt has
+the details.
+
     tests/SilverAssertions.Tests
         The main suite (xUnit v3). One partial-class file per assertion method
-        group, e.g. Primitives/StringAssertionTests.Contain.cs. Run with
-        "dotnet test".
+        group, e.g. Primitives/StringAssertionTests.Contain.cs. Covered by the
+        first command above.
 
     tests/SilverAssertions.Equivalency.Tests
         The BeEquivalentTo suite (xUnit v3): object graphs, collections,
@@ -31,14 +48,19 @@ TEST PROJECTS
         assemblies to reason about (TestAssemblyA references TestAssemblyB).
 
     tests/TestFrameworks/XUnit3.Tests
+    tests/TestFrameworks/XUnit4.Tests
     tests/TestFrameworks/NUnit4.Tests
     tests/TestFrameworks/MSTestV4.Tests
     tests/TestFrameworks/MSpec.Tests
-        Four one-test projects, each referencing a different test framework.
-        Each asserts that a failing SilverAssertions assertion throws that
-        framework's own assertion-exception type, which is what proves the
-        framework adapters work. They are part of the solution and run with the
-        normal "dotnet test".
+        Five one-test projects. Each asserts that a failing SilverAssertions
+        assertion throws the right framework's own assertion-exception type,
+        which is what proves the framework adapters work. XUnit3.Tests and
+        XUnit4.Tests cover the same adapter against different xunit.v3 package
+        lines (3.x and 4.x respectively) - see MAINTAINER-README.txt. XUnit3,
+        XUnit4, NUnit4 and MSTestV4 are covered by the first command above;
+        MSpec.Tests needs the second one, because Machine.Specifications has no
+        Microsoft Testing Platform runner and the project is pinned to VSTest
+        by its own global.json.
 
 VENDORED LIBRARY SOURCE
 =======================
