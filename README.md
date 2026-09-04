@@ -144,12 +144,15 @@ dateTime.Should().BeAfter(new DateTime(2025, 1, 1));
 dateTime.Should().HaveYear(2025).And.HaveMonth(7).And.HaveDay(4);
 ```
 
-## Further reading
+## Documentation
 
-- **[AGENT-README.txt](https://github.com/ellisnet/SilverAssertions/blob/main/AGENT-README.txt)** - the complete API
-  reference, with worked examples, common pitfalls and the extensibility
-  points. Written for AI coding agents, but it is the most thorough
-  documentation available and reads perfectly well for humans.
+- **AGENT-README.txt** - the complete API reference, with worked examples,
+  common pitfalls and the extensibility points. It ships inside the NuGet
+  package, so installing SilverAssertions already gives you a local copy;
+  point your AI coding agent at that file when it is writing code against this
+  library. It is also the most thorough documentation available and reads
+  perfectly well for humans, and it is
+  [readable on GitHub](https://github.com/ellisnet/SilverAssertions/blob/main/AGENT-README.txt).
 - **[SilverAssertions.Tests](https://github.com/ellisnet/SilverAssertions/tree/main/tests/SilverAssertions.Tests)** and
   **[SilverAssertions.Equivalency.Tests](https://github.com/ellisnet/SilverAssertions/tree/main/tests/SilverAssertions.Equivalency.Tests)**
   - the test suites double as executable documentation, with far more sample

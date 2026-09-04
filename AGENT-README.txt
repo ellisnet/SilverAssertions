@@ -20,8 +20,8 @@ failure.
 
 Target framework: .NET 10 or later.
 
-Provenance: SilverAssertions is a fork of FluentAssertions 7.1.0, licensed under
-the Apache License 2.0. The API surface is close to that of the upstream
+Provenance: SilverAssertions is a fork of FluentAssertions, licensed under the
+Apache License 2.0. The API surface is close to that of the upstream
 project, but every namespace root is "SilverAssertions" instead of
 "FluentAssertions". Do NOT write "using FluentAssertions;" and do NOT reference
 both libraries in the same project - the ".Should()" extension methods would be

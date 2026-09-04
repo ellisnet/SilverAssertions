@@ -30,6 +30,9 @@ REPOSITORY LAYOUT
     LICENSE                   Apache License 2.0.
     THIRD-PARTY-NOTICES.txt   Notices for FluentAssertions, Chill, Reflectify.
     icon-codebrix-128.png     Package icon.
+    global.json               Selects the Microsoft.Testing.Platform test
+                              runner; pins no SDK version. Load-bearing - see
+                              BUILDING and TESTING.
     SilverAssertions.slnx     Solution; also carries the Solution Items folder.
 
     src/SilverAssertions/     The library. Sub-folders map to namespaces:
