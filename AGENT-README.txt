@@ -928,7 +928,7 @@ Usage:
         .WithParameterName("id")
         .And.Message.Should().Contain("invalid");
 
-    (() => { }).Should().NotThrow();
+    FluentActions.Invoking(() => { }).Should().NotThrow();
 
     service.Invoking(s => s.Delete(0)).Should()
         .Throw<ArgumentOutOfRangeException>();
@@ -2508,8 +2508,10 @@ Feature-to-test-file map (paths relative to the base URL above):
     -> tests/SilverAssertions.Tests/Execution/TestFrameworkProviderTests.cs
     -> tests/SilverAssertions.Tests/Execution/FallbackTestFrameworkTests.cs
 
-  Per-framework smoke tests (xUnit v3, NUnit v4, MSTest v4, MSpec)
+  Per-framework smoke tests (xUnit v3 on the xunit.v3 3.x and 4.x package
+  lines, NUnit v4, MSTest v4, MSpec)
     -> tests/TestFrameworks/XUnit3.Tests/FrameworkTests.cs
+    -> tests/TestFrameworks/XUnit4.Tests/FrameworkTests.cs
     -> tests/TestFrameworks/NUnit4.Tests/FrameworkTests.cs
     -> tests/TestFrameworks/MSTestV4.Tests/FrameworkTests.cs
     -> tests/TestFrameworks/MSpec.Tests/FrameworkTests.cs

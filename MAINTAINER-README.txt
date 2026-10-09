@@ -120,7 +120,7 @@ single test. Why it takes two commands:
 
 The first command uses --test-modules (a glob over already-built assemblies)
 instead of --solution, because that is the only form that runs several projects
-in one invocation without triggering the solution-wide runner check. Two
+in one invocation without tripping the solution-wide runner check. Two
 consequences: it does not build anything, hence the "dotnet build &&" in front;
 and it rejects -c/-f/--arch/--os/--runtime, so to test Release you build with
 -c Release and change Debug to Release inside the glob.
@@ -339,8 +339,10 @@ NOTES
     detection may pick v3 where v4 is loaded. That is documented in the source
     and has no practical effect.
   - The solution's "Solution Items" folder lists .gitignore, AGENT-README.txt,
-    icon-codebrix-128.png, LICENSE, README.md and THIRD-PARTY-NOTICES.txt. If
-    you want the new README files visible in the IDE, they would go there too.
+    EXTRAS-README.txt, global.json, icon-codebrix-128.png, LICENSE,
+    MAINTAINER-README.txt, README-INDEX.txt, README.md and
+    THIRD-PARTY-NOTICES.txt. Keep it in step when a root file is added or
+    removed.
   - The eight AI-agent pointer files (AGENTS.md, CLAUDE.md, .clinerules,
     .cursorrules, .cursor/rules/agent-readme.mdc, .windsurfrules,
     .github/copilot-instructions.md, .junie/guidelines.md) are stubs that point
