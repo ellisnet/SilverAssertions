@@ -5,7 +5,7 @@
     <AssemblyName>XUnit3.Tests</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
 
     <!--IMPORTANT: Keep xunit.runner.visualstudio at version 3.x in this project - do not update to 4.x-->
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
