@@ -9,6 +9,7 @@
     <Project Path="libs/Reflectify/DennisDoomen.Reflectify/DennisDoomen.Reflectify.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="AGENT-README.txt" />
     <File Path="EXTRAS-README.txt" />

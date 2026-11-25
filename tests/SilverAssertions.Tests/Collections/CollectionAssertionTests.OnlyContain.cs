@@ -57,7 +57,7 @@ public partial class CollectionAssertionTests
         }
 
         [Fact]
-        public void When_a_collection_is_empty_and_should_contain_only_items_matching_a_predicate_it_should_throw()
+        public void When_a_collection_is_empty_and_should_contain_only_items_matching_a_predicate_it_should_not_throw()
         {
             // Arrange
             IEnumerable<string> strings = Enumerable.Empty<string>();
@@ -66,8 +66,66 @@ public partial class CollectionAssertionTests
             Action act = () => strings.Should().OnlyContain(e => e.Length > 0);
 
             // Assert
-            act.Should().Throw<XunitException>()
-                .WithMessage("Expected strings to contain only items matching (e.Length > 0), but the collection is empty.");
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void When_an_empty_array_should_contain_only_items_matching_a_predicate_it_should_not_throw()
+        {
+            // Arrange
+            int[] collection = new int[] { };
+
+            // Act
+            Action act = () => collection.Should().OnlyContain(i => i > 10, "we want to test the empty case");
+
+            // Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void When_an_empty_dictionary_should_contain_only_items_matching_a_predicate_it_should_not_throw()
+        {
+            // Arrange
+            var dictionary = new Dictionary<int, string>();
+
+            // Act
+            Action act = () => dictionary.Should().OnlyContain(pair => pair.Key > 0);
+
+            // Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void When_a_collection_is_empty_the_predicate_passed_to_OnlyContain_should_not_be_invoked()
+        {
+            // Arrange
+            IEnumerable<int> collection = new OneTimeEnumerable<int>();
+            int invocations = 0;
+
+            Func<int, bool> countingPredicate = _ =>
+            {
+                invocations++;
+                return true;
+            };
+
+            // Act
+            collection.Should().OnlyContain(i => countingPredicate(i));
+
+            // Assert
+            invocations.Should().Be(0);
+        }
+
+        [Fact]
+        public void When_a_collection_is_empty_OnlyContain_should_allow_chaining()
+        {
+            // Arrange
+            IEnumerable<int> collection = Enumerable.Empty<int>();
+
+            // Act
+            Action act = () => collection.Should().OnlyContain(i => i > 0).And.BeEmpty();
+
+            // Assert
+            act.Should().NotThrow();
         }
 
         [Fact]

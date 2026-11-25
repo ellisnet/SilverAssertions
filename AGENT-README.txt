@@ -592,6 +592,10 @@ is an IEnumerable<T>. Key signatures:
       SatisfyRespectively(params Action<T>[] elementInspectors)
       Satisfy(params Expression<Func<T, bool>>[] predicates)
 
+      OnlyContain and AllSatisfy pass on an EMPTY collection (no item fails
+      the predicate or the inspector, which is never invoked) and fail on a
+      null one. Chain ".And.NotBeEmpty()" when at least one item is required.
+
     Equivalency:
       BeEquivalentTo<TExpectation>(IEnumerable<TExpectation> expectation, ...)
       BeEquivalentTo<TExpectation>(IEnumerable<TExpectation> expectation,

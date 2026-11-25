@@ -338,9 +338,9 @@ NOTES
   - The MSTest v3 and v4 adapters share an assembly name and exception type, so
     detection may pick v3 where v4 is loaded. That is documented in the source
     and has no practical effect.
-  - The solution's "Solution Items" folder lists .gitignore, AGENT-README.txt,
-    EXTRAS-README.txt, global.json, icon-codebrix-128.png, LICENSE,
-    MAINTAINER-README.txt, README-INDEX.txt, README.md and
+  - The solution's "Solution Items" folder lists .gitattributes, .gitignore,
+    AGENT-README.txt, EXTRAS-README.txt, global.json, icon-codebrix-128.png,
+    LICENSE, MAINTAINER-README.txt, README-INDEX.txt, README.md and
     THIRD-PARTY-NOTICES.txt. Keep it in step when a root file is added or
     removed.
   - The eight AI-agent pointer files (AGENTS.md, CLAUDE.md, .clinerules,

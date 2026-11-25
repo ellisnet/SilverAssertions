@@ -50,20 +50,70 @@ public partial class CollectionAssertionTests
         }
 
         [Fact]
-        public void An_empty_collection_should_throw()
+        public void An_empty_collection_should_succeed()
         {
             // Arrange
             var collection = Enumerable.Empty<int>();
 
             // Act
             Action act = () =>
-                collection.Should().AllSatisfy(x => x.Should().Be(1), "because we want to test the failure {0}", "message");
+                collection.Should().AllSatisfy(x => x.Should().Be(1), "because we want to test the empty case {0}", "message");
 
             // Assert
-            act.Should()
-                .Throw<XunitException>()
-                .WithMessage(
-                    "Expected collection to contain only items satisfying the inspector because we want to test the failure message, but collection is empty.");
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void An_empty_array_should_succeed()
+        {
+            // Arrange
+            int[] collection = new int[] { };
+
+            // Act
+            Action act = () => collection.Should().AllSatisfy(x => x.Should().BeGreaterThan(10));
+
+            // Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void An_empty_dictionary_should_succeed()
+        {
+            // Arrange
+            var dictionary = new Dictionary<int, string>();
+
+            // Act
+            Action act = () => dictionary.Should().AllSatisfy(pair => pair.Key.Should().BePositive());
+
+            // Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void An_empty_collection_should_not_invoke_the_inspector()
+        {
+            // Arrange
+            IEnumerable<int> collection = new OneTimeEnumerable<int>();
+            int invocations = 0;
+
+            // Act
+            collection.Should().AllSatisfy(_ => invocations++);
+
+            // Assert
+            invocations.Should().Be(0);
+        }
+
+        [Fact]
+        public void An_empty_collection_should_allow_chaining()
+        {
+            // Arrange
+            IEnumerable<int> collection = Enumerable.Empty<int>();
+
+            // Act
+            Action act = () => collection.Should().AllSatisfy(x => x.Should().BePositive()).And.BeEmpty();
+
+            // Assert
+            act.Should().NotThrow();
         }
 
         [Fact]

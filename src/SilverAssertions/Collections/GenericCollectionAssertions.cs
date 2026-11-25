@@ -2830,6 +2830,10 @@ public class GenericCollectionAssertions<TCollection, T, TAssertions> : Referenc
     /// <summary>
     /// Asserts that the collection only contains items that match a predicate.
     /// </summary>
+    /// <remarks>
+    /// An empty collection satisfies this assertion, because none of its items fail to match the predicate.
+    /// A <see langword="null"/> collection fails it. Combine with <see cref="NotBeEmpty"/> to also require at least one item.
+    /// </remarks>
     /// <param name="predicate">A predicate to match the items in the collection against.</param>
     /// <param name="because">
     /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
@@ -2854,9 +2858,6 @@ public class GenericCollectionAssertions<TCollection, T, TAssertions> : Referenc
             .FailWith("but the collection is <null>.")
             .Then
             .Given(subject => subject.ConvertOrCastToCollection())
-            .ForCondition(collection => collection.Count > 0)
-            .FailWith("but the collection is empty.")
-            .Then
             .Given(collection => collection.Where(item => !compiledPredicate(item)))
             .ForCondition(mismatchingItems => !mismatchingItems.Any())
             .FailWith("but {0} do(es) not match.", mismatchingItems => mismatchingItems)
@@ -2974,6 +2975,10 @@ public class GenericCollectionAssertions<TCollection, T, TAssertions> : Referenc
     /// Asserts that a collection contains only items which meet
     /// the criteria provided by the inspector.
     /// </summary>
+    /// <remarks>
+    /// An empty collection satisfies this assertion, and the inspector is never invoked for it.
+    /// A <see langword="null"/> collection fails it. Combine with <see cref="NotBeEmpty"/> to also require at least one item.
+    /// </remarks>
     /// <param name="expected">
     /// The element inspector, which inspects each element in turn.
     /// </param>
@@ -2995,9 +3000,6 @@ public class GenericCollectionAssertions<TCollection, T, TAssertions> : Referenc
             .Given(() => Subject)
             .ForCondition(subject => subject is not null)
             .FailWith("but collection is <null>.")
-            .Then
-            .ForCondition(subject => subject.Any())
-            .FailWith("but collection is empty.")
             .Then
             .ClearExpectation();
 
